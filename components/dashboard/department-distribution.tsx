@@ -1,16 +1,23 @@
-"use client"
+"use client";
 
-import { Card } from "antd"
-import dynamic from "next/dynamic"
-import { DoughnutChart, type DoughnutChartProps } from "@/components/ui/chart"
+import { Card } from "antd";
+import dynamic from "next/dynamic";
+import { DoughnutChart, type DoughnutChartProps } from "@/components/ui/chart";
 
 // Dynamically import the chart to avoid SSR issues
-const Chart = dynamic(() => Promise.resolve(DoughnutChart), { ssr: false })
+const Chart = dynamic(() => Promise.resolve(DoughnutChart), { ssr: false });
 
 export function DepartmentDistribution() {
   const chartData: DoughnutChartProps = {
     data: {
-      labels: ["Engineering", "Marketing", "HR", "Finance", "Operations", "Sales"],
+      labels: [
+        "Engineering",
+        "Marketing",
+        "HR",
+        "Finance",
+        "Operations",
+        "Sales",
+      ],
       datasets: [
         {
           data: [38, 22, 15, 18, 12, 19],
@@ -43,11 +50,14 @@ export function DepartmentDistribution() {
       },
       cutout: "60%",
     },
-  }
+  };
 
   return (
-    <Card title="Department Distribution" className="shadow-sm hover:shadow-md transition-shadow h-full">
+    <Card
+      title="Department Distribution"
+      className="shadow-sm hover:shadow-md transition-shadow h-full"
+    >
       <Chart {...chartData} />
     </Card>
-  )
+  );
 }

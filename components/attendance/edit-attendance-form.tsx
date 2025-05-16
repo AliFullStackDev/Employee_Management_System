@@ -1,126 +1,143 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Clock } from "lucide-react"
-import { format, parse } from "date-fns"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, Clock } from "lucide-react";
+import { format, parse } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface EditAttendanceFormProps {
-  attendance: any
-  onSubmit: (data: any) => void
-  onCancel: () => void
+  attendance: any;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
-export function EditAttendanceForm({ attendance, onSubmit, onCancel }: EditAttendanceFormProps) {
-  const [formData, setFormData] = useState({ ...attendance })
-  const [calendarOpen, setCalendarOpen] = useState(false)
+export function EditAttendanceForm({
+  attendance,
+  onSubmit,
+  onCancel,
+}: EditAttendanceFormProps) {
+  const [formData, setFormData] = useState({ ...attendance });
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     attendance.date ? new Date(attendance.date) : new Date(),
-  )
+  );
 
   useEffect(() => {
-    setFormData({ ...attendance })
+    setFormData({ ...attendance });
 
     // Try to parse the date
     try {
       if (attendance.date) {
         // Try different date formats
-        let parsedDate: Date | undefined
+        let parsedDate: Date | undefined;
         try {
-          parsedDate = parse(attendance.date, "MMMM d, yyyy", new Date())
+          parsedDate = parse(attendance.date, "MMMM d, yyyy", new Date());
         } catch {
           try {
-            parsedDate = parse(attendance.date, "yyyy-MM-dd", new Date())
+            parsedDate = parse(attendance.date, "yyyy-MM-dd", new Date());
           } catch {
             try {
-              parsedDate = new Date(attendance.date)
+              parsedDate = new Date(attendance.date);
             } catch {
-              parsedDate = new Date()
+              parsedDate = new Date();
             }
           }
         }
-        setSelectedDate(parsedDate)
+        setSelectedDate(parsedDate);
       }
     } catch (error) {
-      console.error("Error parsing date:", error)
+      console.error("Error parsing date:", error);
     }
-  }, [attendance])
+  }, [attendance]);
 
   const handleTimeChange = (field: string, value: string) => {
     setFormData((prev) => {
-      const newData = { ...prev, [field]: value }
+      const newData = { ...prev, [field]: value };
 
       // Calculate working hours if both check-in and check-out are provided
       if (newData.checkIn && newData.checkOut) {
         try {
-          const checkIn = new Date(`2000-01-01 ${newData.checkIn}`)
-          const checkOut = new Date(`2000-01-01 ${newData.checkOut}`)
+          const checkIn = new Date(`2000-01-01 ${newData.checkIn}`);
+          const checkOut = new Date(`2000-01-01 ${newData.checkOut}`);
 
           // If check-out is earlier than check-in, assume it's the next day
-          let diff = checkOut.getTime() - checkIn.getTime()
+          let diff = checkOut.getTime() - checkIn.getTime();
           if (diff < 0) {
-            diff += 24 * 60 * 60 * 1000 // Add 24 hours
+            diff += 24 * 60 * 60 * 1000; // Add 24 hours
           }
 
-          const hours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100
-          newData.workingHours = hours.toString()
+          const hours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100;
+          newData.workingHours = hours.toString();
 
           // Set status based on working hours
           if (hours === 0) {
-            newData.status = "Absent"
+            newData.status = "Absent";
           } else if (hours < 4) {
-            newData.status = "Half Day"
+            newData.status = "Half Day";
           } else {
-            newData.status = "Present"
+            newData.status = "Present";
           }
 
           // Set check-in status
-          const checkInHour = checkIn.getHours()
-          const checkInMinute = checkIn.getMinutes()
+          const checkInHour = checkIn.getHours();
+          const checkInMinute = checkIn.getMinutes();
           if (checkInHour > 9 || (checkInHour === 9 && checkInMinute > 15)) {
-            newData.checkInStatus = "late"
+            newData.checkInStatus = "late";
           } else {
-            newData.checkInStatus = "on-time"
+            newData.checkInStatus = "on-time";
           }
 
           // Set check-out status
-          const checkOutHour = checkOut.getHours()
-          const checkOutMinute = checkOut.getMinutes()
-          if (checkOutHour < 17 || (checkOutHour === 17 && checkOutMinute < 0)) {
-            newData.checkOutStatus = "early"
+          const checkOutHour = checkOut.getHours();
+          const checkOutMinute = checkOut.getMinutes();
+          if (
+            checkOutHour < 17 ||
+            (checkOutHour === 17 && checkOutMinute < 0)
+          ) {
+            newData.checkOutStatus = "early";
           } else {
-            newData.checkOutStatus = "on-time"
+            newData.checkOutStatus = "on-time";
           }
         } catch (error) {
-          console.error("Error calculating working hours:", error)
+          console.error("Error calculating working hours:", error);
         }
       }
 
-      return newData
-    })
-  }
+      return newData;
+    });
+  };
 
   const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date)
+    setSelectedDate(date);
     if (date) {
-      setFormData((prev) => ({ ...prev, date: format(date, "MMMM d, yyyy") }))
-      setCalendarOpen(false)
+      setFormData((prev) => ({ ...prev, date: format(date, "MMMM d, yyyy") }));
+      setCalendarOpen(false);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -133,21 +150,34 @@ export function EditAttendanceForm({ attendance, onSubmit, onCancel }: EditAtten
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !selectedDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !selectedDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {selectedDate ? format(selectedDate, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={selectedDate} onSelect={handleDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={selectedDate}
+                onSelect={handleDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="employeeName">Employee</Label>
-          <Input id="employeeName" value={formData.employeeName} readOnly className="bg-gray-50" />
+          <Input
+            id="employeeName"
+            value={formData.employeeName}
+            readOnly
+            className="bg-gray-50"
+          />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -189,12 +219,23 @@ export function EditAttendanceForm({ attendance, onSubmit, onCancel }: EditAtten
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="workingHours">Working Hours</Label>
-            <Input id="workingHours" type="text" value={formData.workingHours} readOnly className="bg-gray-50" />
+            <Input
+              id="workingHours"
+              type="text"
+              value={formData.workingHours}
+              readOnly
+              className="bg-gray-50"
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+            <Select
+              value={formData.status}
+              onValueChange={(value) =>
+                setFormData({ ...formData, status: value })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
@@ -217,5 +258,5 @@ export function EditAttendanceForm({ attendance, onSubmit, onCancel }: EditAtten
         </Button>
       </div>
     </form>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Users } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Users } from "lucide-react";
 
 interface ProjectTeamDisplayProps {
   project: {
-    name: string
-    team: string[]
-  }
+    name: string;
+    team: string[];
+  };
 }
 
 export function ProjectTeamDisplay({ project }: ProjectTeamDisplayProps) {
@@ -27,11 +27,11 @@ export function ProjectTeamDisplay({ project }: ProjectTeamDisplayProps) {
       "https://randomuser.me/api/portraits/women/8.jpg",
       "https://randomuser.me/api/portraits/men/9.jpg",
       "https://randomuser.me/api/portraits/women/10.jpg",
-    ]
+    ];
 
     // Use modulo to cycle through the avatar set
-    return avatarSet[index % avatarSet.length]
-  }
+    return avatarSet[index % avatarSet.length];
+  };
 
   return (
     <Card className="overflow-hidden">
@@ -54,7 +54,10 @@ export function ProjectTeamDisplay({ project }: ProjectTeamDisplayProps) {
               className="flex items-center gap-3 p-3 hover:bg-slate-50 dark:hover:bg-slate-900/10 transition-colors"
             >
               <Avatar className="h-9 w-9 border-2 border-white shadow">
-                <AvatarImage src={getAvatarUrl(member, index) || "/placeholder.svg"} alt={member} />
+                <AvatarImage
+                  src={getAvatarUrl(member, index) || "/placeholder.svg"}
+                  alt={member}
+                />
                 <AvatarFallback>{member.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
@@ -66,5 +69,5 @@ export function ProjectTeamDisplay({ project }: ProjectTeamDisplayProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

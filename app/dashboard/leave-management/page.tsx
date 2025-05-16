@@ -1,4 +1,4 @@
-import { LeaveManagement } from "@/components/leave/leave-management"
+import { LeaveManagement } from "@/components/leave/leave-management";
 
 export default function LeavePage() {
   return (
@@ -6,5 +6,5 @@ export default function LeavePage() {
       <h1 className="text-2xl font-bold tracking-tight">Leave Management</h1>
       <LeaveManagement />
     </div>
-  )
+  );
 }

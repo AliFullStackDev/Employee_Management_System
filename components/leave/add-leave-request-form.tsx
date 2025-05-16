@@ -1,15 +1,21 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface AddLeaveRequestFormProps {
-  onSubmit: (data: any) => void
+  onSubmit: (data: any) => void;
 }
 
 export function AddLeaveRequestForm({ onSubmit }: AddLeaveRequestFormProps) {
@@ -20,31 +26,36 @@ export function AddLeaveRequestForm({ onSubmit }: AddLeaveRequestFormProps) {
     endDate: new Date().toISOString().slice(0, 10),
     days: "1",
     reason: "",
-  })
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       ...formData,
       days: Number.parseInt(formData.days),
-    })
-  }
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <Label htmlFor="employeeName">Employee Name</Label>
-          <Select value={formData.employeeName} onValueChange={(value) => handleSelectChange("employeeName", value)}>
+          <Select
+            value={formData.employeeName}
+            onValueChange={(value) => handleSelectChange("employeeName", value)}
+          >
             <SelectTrigger className="mt-2">
               <SelectValue placeholder="Select employee" />
             </SelectTrigger>
@@ -59,7 +70,10 @@ export function AddLeaveRequestForm({ onSubmit }: AddLeaveRequestFormProps) {
 
         <div>
           <Label htmlFor="leaveType">Leave Type</Label>
-          <Select value={formData.leaveType} onValueChange={(value) => handleSelectChange("leaveType", value)}>
+          <Select
+            value={formData.leaveType}
+            onValueChange={(value) => handleSelectChange("leaveType", value)}
+          >
             <SelectTrigger className="mt-2">
               <SelectValue placeholder="Select leave type" />
             </SelectTrigger>
@@ -128,5 +142,5 @@ export function AddLeaveRequestForm({ onSubmit }: AddLeaveRequestFormProps) {
         </Button>
       </div>
     </form>
-  )
+  );
 }

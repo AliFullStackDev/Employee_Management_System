@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card } from "@/components/ui/card"
-import { Users, Clock, Calendar, Briefcase } from "lucide-react"
+import { Card } from "@/components/ui/card";
+import { Users, Clock, Calendar, Briefcase } from "lucide-react";
 
 export function DashboardStats() {
   return (
@@ -16,7 +16,9 @@ export function DashboardStats() {
           </div>
           <div className="flex justify-between items-end">
             <p className="text-3xl font-bold">124</p>
-            <p className="text-xs text-green-600 dark:text-green-400">+12 from last month</p>
+            <p className="text-xs text-green-600 dark:text-green-400">
+              +12 from last month
+            </p>
           </div>
         </div>
       </Card>
@@ -31,7 +33,9 @@ export function DashboardStats() {
           </div>
           <div className="flex justify-between items-end">
             <p className="text-3xl font-bold">98</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">79% attendance rate</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              79% attendance rate
+            </p>
           </div>
         </div>
       </Card>
@@ -46,7 +50,9 @@ export function DashboardStats() {
           </div>
           <div className="flex justify-between items-end">
             <p className="text-3xl font-bold">8</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">6% of workforce</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              6% of workforce
+            </p>
           </div>
         </div>
       </Card>
@@ -61,10 +67,12 @@ export function DashboardStats() {
           </div>
           <div className="flex justify-between items-end">
             <p className="text-3xl font-bold">16</p>
-            <p className="text-xs text-amber-600 dark:text-amber-400">3 due this week</p>
+            <p className="text-xs text-amber-600 dark:text-amber-400">
+              3 due this week
+            </p>
           </div>
         </div>
       </Card>
     </div>
-  )
+  );
 }

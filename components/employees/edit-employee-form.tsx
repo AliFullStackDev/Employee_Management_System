@@ -1,115 +1,141 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { format, parse } from "date-fns"
-import { cn } from "@/lib/utils"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format, parse } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface EditEmployeeFormProps {
-  employee: any
-  onSubmit: (data: any) => void
-  onCancel: () => void
+  employee: any;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
-export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeFormProps) {
-  const [formData, setFormData] = useState({ ...employee })
+export function EditEmployeeForm({
+  employee,
+  onSubmit,
+  onCancel,
+}: EditEmployeeFormProps) {
+  const [formData, setFormData] = useState({ ...employee });
 
-  const [joinDateOpen, setJoinDateOpen] = useState(false)
-  const [birthDateOpen, setBirthDateOpen] = useState(false)
+  const [joinDateOpen, setJoinDateOpen] = useState(false);
+  const [birthDateOpen, setBirthDateOpen] = useState(false);
 
   const [joinDate, setJoinDate] = useState<Date | undefined>(
-    employee.joinDate ? parse(employee.joinDate, "MMMM d, yyyy", new Date()) : new Date(),
-  )
+    employee.joinDate
+      ? parse(employee.joinDate, "MMMM d, yyyy", new Date())
+      : new Date(),
+  );
 
   const [birthDate, setBirthDate] = useState<Date | undefined>(
-    employee.birthDate ? parse(employee.birthDate, "MMMM d, yyyy", new Date()) : undefined,
-  )
+    employee.birthDate
+      ? parse(employee.birthDate, "MMMM d, yyyy", new Date())
+      : undefined,
+  );
 
   useEffect(() => {
-    setFormData({ ...employee })
+    setFormData({ ...employee });
 
     // Try to parse dates in different formats
     try {
       if (employee.joinDate) {
         // Try different date formats
-        let parsedDate: Date | undefined
+        let parsedDate: Date | undefined;
         try {
-          parsedDate = parse(employee.joinDate, "MMMM d, yyyy", new Date())
+          parsedDate = parse(employee.joinDate, "MMMM d, yyyy", new Date());
         } catch {
           try {
-            parsedDate = parse(employee.joinDate, "yyyy-MM-dd", new Date())
+            parsedDate = parse(employee.joinDate, "yyyy-MM-dd", new Date());
           } catch {
             try {
-              parsedDate = new Date(employee.joinDate)
+              parsedDate = new Date(employee.joinDate);
             } catch {
-              parsedDate = new Date()
+              parsedDate = new Date();
             }
           }
         }
-        setJoinDate(parsedDate)
+        setJoinDate(parsedDate);
       }
 
       if (employee.birthDate) {
         // Try different date formats
-        let parsedDate: Date | undefined
+        let parsedDate: Date | undefined;
         try {
-          parsedDate = parse(employee.birthDate, "MMMM d, yyyy", new Date())
+          parsedDate = parse(employee.birthDate, "MMMM d, yyyy", new Date());
         } catch {
           try {
-            parsedDate = parse(employee.birthDate, "yyyy-MM-dd", new Date())
+            parsedDate = parse(employee.birthDate, "yyyy-MM-dd", new Date());
           } catch {
             try {
-              parsedDate = new Date(employee.birthDate)
+              parsedDate = new Date(employee.birthDate);
             } catch {
-              parsedDate = undefined
+              parsedDate = undefined;
             }
           }
         }
-        setBirthDate(parsedDate)
+        setBirthDate(parsedDate);
       }
     } catch (error) {
-      console.error("Error parsing dates:", error)
+      console.error("Error parsing dates:", error);
     }
-  }, [employee])
+  }, [employee]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleJoinDateSelect = (date: Date | undefined) => {
-    setJoinDate(date)
+    setJoinDate(date);
     if (date) {
-      setFormData((prev) => ({ ...prev, joinDate: format(date, "MMMM d, yyyy") }))
-      setJoinDateOpen(false)
+      setFormData((prev) => ({
+        ...prev,
+        joinDate: format(date, "MMMM d, yyyy"),
+      }));
+      setJoinDateOpen(false);
     }
-  }
+  };
 
   const handleBirthDateSelect = (date: Date | undefined) => {
-    setBirthDate(date)
+    setBirthDate(date);
     if (date) {
-      setFormData((prev) => ({ ...prev, birthDate: format(date, "MMMM d, yyyy") }))
-      setBirthDateOpen(false)
+      setFormData((prev) => ({
+        ...prev,
+        birthDate: format(date, "MMMM d, yyyy"),
+      }));
+      setBirthDateOpen(false);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -146,7 +172,10 @@ export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeF
           <Label htmlFor="department">
             Department <span className="text-red-500">*</span>
           </Label>
-          <Select value={formData.department} onValueChange={(value) => handleSelectChange("department", value)}>
+          <Select
+            value={formData.department}
+            onValueChange={(value) => handleSelectChange("department", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select department" />
             </SelectTrigger>
@@ -195,14 +224,22 @@ export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeF
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !joinDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !joinDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {joinDate ? format(joinDate, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={joinDate} onSelect={handleJoinDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={joinDate}
+                onSelect={handleJoinDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
@@ -211,7 +248,10 @@ export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeF
           <Label htmlFor="status">
             Status <span className="text-red-500">*</span>
           </Label>
-          <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
+          <Select
+            value={formData.status}
+            onValueChange={(value) => handleSelectChange("status", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -229,7 +269,10 @@ export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeF
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !birthDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !birthDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {birthDate ? format(birthDate, "PPP") : "Select date"}
@@ -270,5 +313,5 @@ export function EditEmployeeForm({ employee, onSubmit, onCancel }: EditEmployeeF
         </Button>
       </div>
     </form>
-  )
+  );
 }

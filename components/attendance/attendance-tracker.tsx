@@ -1,13 +1,27 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Calendar, Clock, Filter, Download, Plus, Edit, Trash2, Users } from "lucide-react"
-import { mockAttendance } from "@/lib/mock-data"
-import { useLayout } from "@/components/layout/layout-provider"
-import { useToast } from "@/hooks/use-toast"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Calendar,
+  Clock,
+  Filter,
+  Download,
+  Plus,
+  Edit,
+  Trash2,
+  Users,
+} from "lucide-react";
+import { mockAttendance } from "@/lib/mock-data";
+import { useLayout } from "@/components/layout/layout-provider";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,110 +31,148 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { MarkAttendanceForm } from "@/components/attendance/mark-attendance-form"
-import { EditAttendanceForm } from "@/components/attendance/edit-attendance-form"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Calendar as CalendarComponent } from "@/components/ui/calendar"
-import { format } from "date-fns"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { BulkAttendanceForm } from "@/components/attendance/bulk-attendance-form"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+} from "@/components/ui/alert-dialog";
+import { MarkAttendanceForm } from "@/components/attendance/mark-attendance-form";
+import { EditAttendanceForm } from "@/components/attendance/edit-attendance-form";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar as CalendarComponent } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { BulkAttendanceForm } from "@/components/attendance/bulk-attendance-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function AttendanceTracker() {
-  const { attendance, addAttendance, updateAttendance, deleteAttendance, employees } = useLayout()
-  const { toast } = useToast()
+  const {
+    attendance,
+    addAttendance,
+    updateAttendance,
+    deleteAttendance,
+    employees,
+  } = useLayout();
+  const { toast } = useToast();
 
-  const [dateRange, setDateRange] = useState<[Date | undefined, Date | undefined]>([undefined, undefined])
-  const [calendarOpen, setCalendarOpen] = useState(false)
-  const [selectedEmployee, setSelectedEmployee] = useState<string>("all")
-  const [selectedStatus, setSelectedStatus] = useState<string>("all")
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date())
-  const [selectedRecords, setSelectedRecords] = useState<string[]>([])
-  const [selectAll, setSelectAll] = useState(false)
+  const [dateRange, setDateRange] = useState<
+    [Date | undefined, Date | undefined]
+  >([undefined, undefined]);
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedRecords, setSelectedRecords] = useState<string[]>([]);
+  const [selectAll, setSelectAll] = useState(false);
 
   // Dialog states
-  const [markAttendanceOpen, setMarkAttendanceOpen] = useState(false)
-  const [bulkAttendanceOpen, setBulkAttendanceOpen] = useState(false)
-  const [editAttendanceOpen, setEditAttendanceOpen] = useState(false)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [selectedAttendance, setSelectedAttendance] = useState<any>(null)
+  const [markAttendanceOpen, setMarkAttendanceOpen] = useState(false);
+  const [bulkAttendanceOpen, setBulkAttendanceOpen] = useState(false);
+  const [editAttendanceOpen, setEditAttendanceOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedAttendance, setSelectedAttendance] = useState<any>(null);
 
   // Use attendance from context if available, otherwise use mock data
-  const attendanceData = attendance.length > 0 ? attendance : mockAttendance
+  const attendanceData = attendance.length > 0 ? attendance : mockAttendance;
 
   const filteredData = attendanceData.filter((record) => {
-    const matchesEmployee = selectedEmployee === "all" || record.employeeId === selectedEmployee
-    const matchesStatus = selectedStatus === "all" || record.status === selectedStatus
+    const matchesEmployee =
+      selectedEmployee === "all" || record.employeeId === selectedEmployee;
+    const matchesStatus =
+      selectedStatus === "all" || record.status === selectedStatus;
 
     if (dateRange[0] && dateRange[1]) {
-      const recordDate = new Date(record.date)
-      const isInRange = recordDate >= dateRange[0] && recordDate <= dateRange[1]
-      return matchesEmployee && matchesStatus && isInRange
+      const recordDate = new Date(record.date);
+      const isInRange =
+        recordDate >= dateRange[0] && recordDate <= dateRange[1];
+      return matchesEmployee && matchesStatus && isInRange;
     }
 
-    return matchesEmployee && matchesStatus
-  })
+    return matchesEmployee && matchesStatus;
+  });
 
   const handleMarkAttendance = (data: any) => {
     const newAttendance = {
       ...data,
       id: (attendanceData.length + 1).toString(),
       date: format(selectedDate, "MMMM d, yyyy"),
-    }
+    };
 
-    addAttendance(newAttendance)
-    setMarkAttendanceOpen(false)
+    addAttendance(newAttendance);
+    setMarkAttendanceOpen(false);
 
     toast({
       title: "Attendance Marked",
       description: `Attendance for ${data.employeeName} has been recorded.`,
-    })
-  }
+    });
+  };
 
   const handleBulkAttendance = (data: any) => {
-    const { selectedEmployees, date, checkIn, checkOut, status } = data
+    const { selectedEmployees, date, checkIn, checkOut, status } = data;
 
     const newRecords = selectedEmployees.map((empId: string, index: number) => {
-      const employee = employees.find((e) => e.id === empId || e.employeeId === empId)
+      const employee = employees.find(
+        (e) => e.id === empId || e.employeeId === empId,
+      );
 
       // Calculate working hours
-      let workingHours = "0"
-      let checkInStatus = "on-time"
-      let checkOutStatus = "on-time"
+      let workingHours = "0";
+      let checkInStatus = "on-time";
+      let checkOutStatus = "on-time";
 
       if (checkIn && checkOut) {
         try {
-          const checkInTime = new Date(`2000-01-01 ${checkIn}`)
-          const checkOutTime = new Date(`2000-01-01 ${checkOut}`)
+          const checkInTime = new Date(`2000-01-01 ${checkIn}`);
+          const checkOutTime = new Date(`2000-01-01 ${checkOut}`);
 
-          let diff = checkOutTime.getTime() - checkInTime.getTime()
+          let diff = checkOutTime.getTime() - checkInTime.getTime();
           if (diff < 0) {
-            diff += 24 * 60 * 60 * 1000
+            diff += 24 * 60 * 60 * 1000;
           }
 
-          const hours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100
-          workingHours = hours.toString()
+          const hours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100;
+          workingHours = hours.toString();
 
           // Set check-in status
-          const checkInHour = checkInTime.getHours()
-          const checkInMinute = checkInTime.getMinutes()
+          const checkInHour = checkInTime.getHours();
+          const checkInMinute = checkInTime.getMinutes();
           if (checkInHour > 9 || (checkInHour === 9 && checkInMinute > 15)) {
-            checkInStatus = "late"
+            checkInStatus = "late";
           }
 
           // Set check-out status
-          const checkOutHour = checkOutTime.getHours()
-          const checkOutMinute = checkOutTime.getMinutes()
-          if (checkOutHour < 17 || (checkOutHour === 17 && checkOutMinute < 0)) {
-            checkOutStatus = "early"
+          const checkOutHour = checkOutTime.getHours();
+          const checkOutMinute = checkOutTime.getMinutes();
+          if (
+            checkOutHour < 17 ||
+            (checkOutHour === 17 && checkOutMinute < 0)
+          ) {
+            checkOutStatus = "early";
           }
         } catch (error) {
-          console.error("Error calculating working hours:", error)
+          console.error("Error calculating working hours:", error);
         }
       }
 
@@ -135,75 +187,83 @@ export function AttendanceTracker() {
         checkOutStatus,
         workingHours,
         status,
-      }
-    })
+      };
+    });
 
     // Add all new records
     newRecords.forEach((record) => {
-      addAttendance(record)
-    })
+      addAttendance(record);
+    });
 
-    setBulkAttendanceOpen(false)
+    setBulkAttendanceOpen(false);
 
     toast({
       title: "Bulk Attendance Marked",
       description: `Attendance for ${newRecords.length} employees has been recorded.`,
-    })
-  }
+    });
+  };
 
   const handleEditAttendance = (data: any) => {
-    updateAttendance(data)
-    setEditAttendanceOpen(false)
+    updateAttendance(data);
+    setEditAttendanceOpen(false);
 
     toast({
       title: "Attendance Updated",
       description: `Attendance record has been updated successfully.`,
-    })
-  }
+    });
+  };
 
   const handleDeleteAttendance = () => {
     if (selectedAttendance) {
-      deleteAttendance(selectedAttendance.id)
-      setDeleteDialogOpen(false)
+      deleteAttendance(selectedAttendance.id);
+      setDeleteDialogOpen(false);
 
       toast({
         title: "Attendance Deleted",
         description: `Attendance record has been deleted.`,
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const handleBulkDelete = () => {
     if (selectedRecords.length > 0) {
       selectedRecords.forEach((id) => {
-        deleteAttendance(id)
-      })
+        deleteAttendance(id);
+      });
 
-      setSelectedRecords([])
-      setSelectAll(false)
+      setSelectedRecords([]);
+      setSelectAll(false);
 
       toast({
         title: "Bulk Delete Successful",
         description: `${selectedRecords.length} attendance records have been deleted.`,
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const openEditDialog = (record: any) => {
-    setSelectedAttendance(record)
-    setEditAttendanceOpen(true)
-  }
+    setSelectedAttendance(record);
+    setEditAttendanceOpen(true);
+  };
 
   const openDeleteDialog = (record: any) => {
-    setSelectedAttendance(record)
-    setDeleteDialogOpen(true)
-  }
+    setSelectedAttendance(record);
+    setDeleteDialogOpen(true);
+  };
 
   const exportToCSV = () => {
     // Create CSV content
-    const headers = ["Employee ID", "Employee Name", "Date", "Check In", "Check Out", "Working Hours", "Status"]
+    const headers = [
+      "Employee ID",
+      "Employee Name",
+      "Date",
+      "Check In",
+      "Check Out",
+      "Working Hours",
+      "Status",
+    ];
     const csvContent = [
       headers.join(","),
       ...filteredData.map((record) => {
@@ -215,56 +275,68 @@ export function AttendanceTracker() {
           record.checkOut,
           record.workingHours,
           record.status,
-        ].join(",")
+        ].join(",");
       }),
-    ].join("\n")
+    ].join("\n");
 
     // Create a blob and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.setAttribute("href", url)
-    link.setAttribute("download", "attendance.csv")
-    link.style.visibility = "hidden"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "attendance.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast({
       title: "Export Successful",
       description: `${filteredData.length} attendance records exported to CSV.`,
-    })
-  }
+    });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Present":
-        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">{status}</Badge>
+        return (
+          <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+            {status}
+          </Badge>
+        );
       case "Absent":
-        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">{status}</Badge>
+        return (
+          <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+            {status}
+          </Badge>
+        );
       case "Half Day":
-        return <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">{status}</Badge>
+        return (
+          <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+            {status}
+          </Badge>
+        );
       default:
-        return <Badge>{status}</Badge>
+        return <Badge>{status}</Badge>;
     }
-  }
+  };
 
   const handleSelectRecord = (id: string, checked: boolean) => {
     if (checked) {
-      setSelectedRecords((prev) => [...prev, id])
+      setSelectedRecords((prev) => [...prev, id]);
     } else {
-      setSelectedRecords((prev) => prev.filter((recordId) => recordId !== id))
+      setSelectedRecords((prev) => prev.filter((recordId) => recordId !== id));
     }
-  }
+  };
 
   const handleSelectAll = (checked: boolean) => {
-    setSelectAll(checked)
+    setSelectAll(checked);
     if (checked) {
-      setSelectedRecords(filteredData.map((record) => record.id))
+      setSelectedRecords(filteredData.map((record) => record.id));
     } else {
-      setSelectedRecords([])
+      setSelectedRecords([]);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -281,7 +353,11 @@ export function AttendanceTracker() {
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={handleBulkDelete}
+                      >
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete Selected ({selectedRecords.length})
                       </Button>
@@ -296,7 +372,11 @@ export function AttendanceTracker() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" className="flex items-center gap-2" onClick={exportToCSV}>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={exportToCSV}
+                    >
                       <Download className="h-4 w-4" />
                       <span className="hidden sm:inline">Export</span>
                     </Button>
@@ -315,7 +395,10 @@ export function AttendanceTracker() {
                 <Calendar className="h-5 w-5 text-sky-600" />
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
+                    <Button
+                      variant="outline"
+                      className="w-[240px] justify-start text-left font-normal"
+                    >
                       <Calendar className="mr-2 h-4 w-4" />
                       {dateRange[0] && dateRange[1]
                         ? `${format(dateRange[0], "MMM d, yyyy")} - ${format(dateRange[1], "MMM d, yyyy")}`
@@ -330,9 +413,9 @@ export function AttendanceTracker() {
                         to: dateRange[1],
                       }}
                       onSelect={(range) => {
-                        setDateRange([range?.from, range?.to])
+                        setDateRange([range?.from, range?.to]);
                         if (range?.from && range?.to) {
-                          setCalendarOpen(false)
+                          setCalendarOpen(false);
                         }
                       }}
                       initialFocus
@@ -342,7 +425,10 @@ export function AttendanceTracker() {
               </div>
               <div className="flex items-center gap-2">
                 <Filter className="h-5 w-5 text-sky-600" />
-                <Select value={selectedEmployee} onValueChange={setSelectedEmployee}>
+                <Select
+                  value={selectedEmployee}
+                  onValueChange={setSelectedEmployee}
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="All Employees" />
                   </SelectTrigger>
@@ -357,7 +443,10 @@ export function AttendanceTracker() {
                 </Select>
               </div>
               <div className="flex items-center gap-2">
-                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                <Select
+                  value={selectedStatus}
+                  onValueChange={setSelectedStatus}
+                >
                   <SelectTrigger className="w-[140px]">
                     <SelectValue placeholder="All Status" />
                   </SelectTrigger>
@@ -377,7 +466,10 @@ export function AttendanceTracker() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button className="bg-sky-600 hover:bg-sky-700" onClick={() => setMarkAttendanceOpen(true)}>
+                    <Button
+                      className="bg-sky-600 hover:bg-sky-700"
+                      onClick={() => setMarkAttendanceOpen(true)}
+                    >
                       <Plus className="h-4 w-4 mr-2" /> Mark Individual
                     </Button>
                   </TooltipTrigger>
@@ -390,7 +482,10 @@ export function AttendanceTracker() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button className="bg-green-600 hover:bg-green-700" onClick={() => setBulkAttendanceOpen(true)}>
+                    <Button
+                      className="bg-green-600 hover:bg-green-700"
+                      onClick={() => setBulkAttendanceOpen(true)}
+                    >
                       <Users className="h-4 w-4 mr-2" /> Mark Bulk Attendance
                     </Button>
                   </TooltipTrigger>
@@ -410,7 +505,11 @@ export function AttendanceTracker() {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[50px]">
-                  <Checkbox checked={selectAll} onCheckedChange={handleSelectAll} aria-label="Select all" />
+                  <Checkbox
+                    checked={selectAll}
+                    onCheckedChange={handleSelectAll}
+                    aria-label="Select all"
+                  />
                 </TableHead>
                 <TableHead>Employee</TableHead>
                 <TableHead>Date</TableHead>
@@ -428,7 +527,9 @@ export function AttendanceTracker() {
                     <TableCell>
                       <Checkbox
                         checked={selectedRecords.includes(record.id)}
-                        onCheckedChange={(checked) => handleSelectRecord(record.id, checked === true)}
+                        onCheckedChange={(checked) =>
+                          handleSelectRecord(record.id, checked === true)
+                        }
                         aria-label={`Select ${record.employeeName}`}
                       />
                     </TableCell>
@@ -507,7 +608,9 @@ export function AttendanceTracker() {
                     <div className="flex flex-col items-center justify-center text-muted-foreground">
                       <Calendar className="h-10 w-10 mb-2" />
                       <p>No attendance records found</p>
-                      <p className="text-sm">Try adjusting your search or filters</p>
+                      <p className="text-sm">
+                        Try adjusting your search or filters
+                      </p>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -538,7 +641,10 @@ export function AttendanceTracker() {
           <DialogHeader>
             <DialogTitle>Bulk Attendance Marking</DialogTitle>
           </DialogHeader>
-          <BulkAttendanceForm onSubmit={handleBulkAttendance} onCancel={() => setBulkAttendanceOpen(false)} />
+          <BulkAttendanceForm
+            onSubmit={handleBulkAttendance}
+            onCancel={() => setBulkAttendanceOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
@@ -564,17 +670,21 @@ export function AttendanceTracker() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this attendance record.
+              This action cannot be undone. This will permanently delete this
+              attendance record.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteAttendance} className="bg-red-600 hover:bg-red-700 text-white">
+            <AlertDialogAction
+              onClick={handleDeleteAttendance}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

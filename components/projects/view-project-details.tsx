@@ -1,13 +1,20 @@
-"use client"
+"use client";
 
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { CalendarDays, Clock, CheckCircle, AlertCircle, Building, Calendar } from "lucide-react"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  CalendarDays,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Building,
+  Calendar,
+} from "lucide-react";
 
 interface ViewProjectDetailsProps {
-  project: any
+  project: any;
 }
 
 export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
@@ -18,29 +25,29 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
           <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 flex items-center gap-1">
             <CheckCircle className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       case "In Progress":
         return (
           <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 flex items-center gap-1">
             <Clock className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       case "On Hold":
         return (
           <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       default:
-        return <Badge>{status}</Badge>
+        return <Badge>{status}</Badge>;
     }
-  }
+  };
 
   const getProgressColor = (progress: number) => {
-    if (progress < 30) return "bg-red-500"
-    if (progress < 70) return "bg-amber-500"
-    return "bg-green-500"
-  }
+    if (progress < 30) return "bg-red-500";
+    if (progress < 70) return "bg-amber-500";
+    return "bg-green-500";
+  };
 
   // Generate a reliable avatar URL based on the member's name and index
   const getAvatarUrl = (name: string, index: number) => {
@@ -56,11 +63,11 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
       "https://randomuser.me/api/portraits/women/8.jpg",
       "https://randomuser.me/api/portraits/men/9.jpg",
       "https://randomuser.me/api/portraits/women/10.jpg",
-    ]
+    ];
 
     // Use modulo to cycle through the avatar set
-    return avatarSet[index % avatarSet.length]
-  }
+    return avatarSet[index % avatarSet.length];
+  };
 
   return (
     <div className="space-y-6">
@@ -68,7 +75,9 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
         <div className="flex-1 space-y-6">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-xl font-bold">{project.name}</CardTitle>
+              <CardTitle className="text-xl font-bold">
+                {project.name}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -113,7 +122,9 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
           {project.description && (
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-base font-medium">Description</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Description
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm">{project.description}</p>
@@ -126,7 +137,9 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-medium">Team Members</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Team Members
+                </CardTitle>
                 <Badge variant="outline" className="ml-2">
                   {project.team.length} members
                 </Badge>
@@ -137,7 +150,10 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
                 {project.team.map((member: string, index: number) => (
                   <div key={index} className="flex items-center gap-3">
                     <Avatar className="h-8 w-8 border shadow-sm">
-                      <AvatarImage src={getAvatarUrl(member, index) || "/placeholder.svg"} alt={member} />
+                      <AvatarImage
+                        src={getAvatarUrl(member, index) || "/placeholder.svg"}
+                        alt={member}
+                      />
                       <AvatarFallback>{member.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -151,5 +167,5 @@ export function ViewProjectDetails({ project }: ViewProjectDetailsProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-import { SettingsForm } from "@/components/settings/settings-form"
+import { SettingsForm } from "@/components/settings/settings-form";
 
 export default function SettingsPage() {
   return (
@@ -6,5 +6,5 @@ export default function SettingsPage() {
       <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
       <SettingsForm />
     </div>
-  )
+  );
 }

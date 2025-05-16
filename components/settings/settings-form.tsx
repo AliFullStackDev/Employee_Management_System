@@ -1,22 +1,28 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { User, Lock, Bell, Palette, UploadIcon, Check } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { User, Lock, Bell, Palette, UploadIcon, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export function SettingsForm() {
-  const { toast } = useToast()
-  const [themeMode, setThemeMode] = useState("light")
+  const { toast } = useToast();
+  const [themeMode, setThemeMode] = useState("light");
 
   // Form state
   const [profileForm, setProfileForm] = useState({
@@ -27,7 +33,7 @@ export function SettingsForm() {
     website: "https://acmecorp.com",
     timezone: "America/Los_Angeles",
     language: "en-US",
-  })
+  });
 
   const [securityForm, setSecurityForm] = useState({
     currentPassword: "",
@@ -36,7 +42,7 @@ export function SettingsForm() {
     twoFactorAuth: true,
     sessionTimeout: "30",
     passwordExpiry: "90",
-  })
+  });
 
   const [notificationForm, setNotificationForm] = useState({
     emailNotifications: true,
@@ -46,31 +52,31 @@ export function SettingsForm() {
     attendanceAlerts: true,
     projectUpdates: true,
     systemUpdates: false,
-  })
+  });
 
   const handleProfileSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     toast({
       title: "Profile settings updated",
       description: "Your profile settings have been updated successfully.",
-    })
-  }
+    });
+  };
 
   const handleSecuritySubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     toast({
       title: "Security settings updated",
       description: "Your security settings have been updated successfully.",
-    })
-  }
+    });
+  };
 
   const handleNotificationSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     toast({
       title: "Notification settings updated",
       description: "Your notification settings have been updated successfully.",
-    })
-  }
+    });
+  };
 
   return (
     <Card>
@@ -82,7 +88,10 @@ export function SettingsForm() {
           <TabsTrigger value="security" className="flex items-center gap-2">
             <Lock className="h-4 w-4" /> Security
           </TabsTrigger>
-          <TabsTrigger value="notifications" className="flex items-center gap-2">
+          <TabsTrigger
+            value="notifications"
+            className="flex items-center gap-2"
+          >
             <Bell className="h-4 w-4" /> Notifications
           </TabsTrigger>
           <TabsTrigger value="appearance" className="flex items-center gap-2">
@@ -109,7 +118,12 @@ export function SettingsForm() {
                     <Input
                       id="companyName"
                       value={profileForm.companyName}
-                      onChange={(e) => setProfileForm({ ...profileForm, companyName: e.target.value })}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          companyName: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter company name"
                     />
@@ -121,7 +135,12 @@ export function SettingsForm() {
                       id="email"
                       type="email"
                       value={profileForm.email}
-                      onChange={(e) => setProfileForm({ ...profileForm, email: e.target.value })}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          email: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter email address"
                     />
@@ -132,7 +151,12 @@ export function SettingsForm() {
                     <Input
                       id="phone"
                       value={profileForm.phone}
-                      onChange={(e) => setProfileForm({ ...profileForm, phone: e.target.value })}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          phone: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter phone number"
                     />
@@ -145,7 +169,12 @@ export function SettingsForm() {
                     <Textarea
                       id="address"
                       value={profileForm.address}
-                      onChange={(e) => setProfileForm({ ...profileForm, address: e.target.value })}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          address: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter address"
                       rows={4}
@@ -157,7 +186,12 @@ export function SettingsForm() {
                     <Input
                       id="website"
                       value={profileForm.website}
-                      onChange={(e) => setProfileForm({ ...profileForm, website: e.target.value })}
+                      onChange={(e) =>
+                        setProfileForm({
+                          ...profileForm,
+                          website: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter website URL"
                     />
@@ -167,16 +201,26 @@ export function SettingsForm() {
                     <Label htmlFor="timezone">Timezone</Label>
                     <Select
                       value={profileForm.timezone}
-                      onValueChange={(value) => setProfileForm({ ...profileForm, timezone: value })}
+                      onValueChange={(value) =>
+                        setProfileForm({ ...profileForm, timezone: value })
+                      }
                     >
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="Select timezone" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="America/Los_Angeles">Pacific Time (US & Canada)</SelectItem>
-                        <SelectItem value="America/Denver">Mountain Time (US & Canada)</SelectItem>
-                        <SelectItem value="America/Chicago">Central Time (US & Canada)</SelectItem>
-                        <SelectItem value="America/New_York">Eastern Time (US & Canada)</SelectItem>
+                        <SelectItem value="America/Los_Angeles">
+                          Pacific Time (US & Canada)
+                        </SelectItem>
+                        <SelectItem value="America/Denver">
+                          Mountain Time (US & Canada)
+                        </SelectItem>
+                        <SelectItem value="America/Chicago">
+                          Central Time (US & Canada)
+                        </SelectItem>
+                        <SelectItem value="America/New_York">
+                          Eastern Time (US & Canada)
+                        </SelectItem>
                         <SelectItem value="UTC">UTC</SelectItem>
                       </SelectContent>
                     </Select>
@@ -186,7 +230,9 @@ export function SettingsForm() {
                     <Label htmlFor="language">Language</Label>
                     <Select
                       value={profileForm.language}
-                      onValueChange={(value) => setProfileForm({ ...profileForm, language: value })}
+                      onValueChange={(value) =>
+                        setProfileForm({ ...profileForm, language: value })
+                      }
                     >
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="Select language" />
@@ -223,7 +269,12 @@ export function SettingsForm() {
                       id="currentPassword"
                       type="password"
                       value={securityForm.currentPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, currentPassword: e.target.value })}
+                      onChange={(e) =>
+                        setSecurityForm({
+                          ...securityForm,
+                          currentPassword: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter current password"
                     />
@@ -235,19 +286,31 @@ export function SettingsForm() {
                       id="newPassword"
                       type="password"
                       value={securityForm.newPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, newPassword: e.target.value })}
+                      onChange={(e) =>
+                        setSecurityForm({
+                          ...securityForm,
+                          newPassword: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Enter new password"
                     />
                   </div>
 
                   <div className="mb-6">
-                    <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                    <Label htmlFor="confirmPassword">
+                      Confirm New Password
+                    </Label>
                     <Input
                       id="confirmPassword"
                       type="password"
                       value={securityForm.confirmPassword}
-                      onChange={(e) => setSecurityForm({ ...securityForm, confirmPassword: e.target.value })}
+                      onChange={(e) =>
+                        setSecurityForm({
+                          ...securityForm,
+                          confirmPassword: e.target.value,
+                        })
+                      }
                       className="mt-2"
                       placeholder="Confirm new password"
                     />
@@ -257,20 +320,34 @@ export function SettingsForm() {
                 <div>
                   <div className="mb-6">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="twoFactorAuth">Two-Factor Authentication</Label>
+                      <Label htmlFor="twoFactorAuth">
+                        Two-Factor Authentication
+                      </Label>
                       <Switch
                         id="twoFactorAuth"
                         checked={securityForm.twoFactorAuth}
-                        onCheckedChange={(checked) => setSecurityForm({ ...securityForm, twoFactorAuth: checked })}
+                        onCheckedChange={(checked) =>
+                          setSecurityForm({
+                            ...securityForm,
+                            twoFactorAuth: checked,
+                          })
+                        }
                       />
                     </div>
                   </div>
 
                   <div className="mb-6">
-                    <Label htmlFor="sessionTimeout">Session Timeout (minutes)</Label>
+                    <Label htmlFor="sessionTimeout">
+                      Session Timeout (minutes)
+                    </Label>
                     <Select
                       value={securityForm.sessionTimeout}
-                      onValueChange={(value) => setSecurityForm({ ...securityForm, sessionTimeout: value })}
+                      onValueChange={(value) =>
+                        setSecurityForm({
+                          ...securityForm,
+                          sessionTimeout: value,
+                        })
+                      }
                     >
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="Select timeout" />
@@ -286,10 +363,17 @@ export function SettingsForm() {
                   </div>
 
                   <div className="mb-6">
-                    <Label htmlFor="passwordExpiry">Password Expiry (days)</Label>
+                    <Label htmlFor="passwordExpiry">
+                      Password Expiry (days)
+                    </Label>
                     <Select
                       value={securityForm.passwordExpiry}
-                      onValueChange={(value) => setSecurityForm({ ...securityForm, passwordExpiry: value })}
+                      onValueChange={(value) =>
+                        setSecurityForm({
+                          ...securityForm,
+                          passwordExpiry: value,
+                        })
+                      }
                     >
                       <SelectTrigger className="mt-2">
                         <SelectValue placeholder="Select expiry" />
@@ -321,30 +405,42 @@ export function SettingsForm() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="emailNotifications">Email Notifications</Label>
+                    <Label htmlFor="emailNotifications">
+                      Email Notifications
+                    </Label>
                     <Switch
                       id="emailNotifications"
                       checked={notificationForm.emailNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationForm({ ...notificationForm, emailNotifications: checked })
+                        setNotificationForm({
+                          ...notificationForm,
+                          emailNotifications: checked,
+                        })
                       }
                     />
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="pushNotifications">Push Notifications</Label>
+                    <Label htmlFor="pushNotifications">
+                      Push Notifications
+                    </Label>
                     <Switch
                       id="pushNotifications"
                       checked={notificationForm.pushNotifications}
                       onCheckedChange={(checked) =>
-                        setNotificationForm({ ...notificationForm, pushNotifications: checked })
+                        setNotificationForm({
+                          ...notificationForm,
+                          pushNotifications: checked,
+                        })
                       }
                     />
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-medium mb-4">Notification Preferences</h3>
+                  <h3 className="text-lg font-medium mb-4">
+                    Notification Preferences
+                  </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex items-center justify-between">
                       <Label htmlFor="newEmployee">New Employee Joins</Label>
@@ -352,7 +448,10 @@ export function SettingsForm() {
                         id="newEmployee"
                         checked={notificationForm.newEmployee}
                         onCheckedChange={(checked) =>
-                          setNotificationForm({ ...notificationForm, newEmployee: checked })
+                          setNotificationForm({
+                            ...notificationForm,
+                            newEmployee: checked,
+                          })
                         }
                       />
                     </div>
@@ -363,18 +462,26 @@ export function SettingsForm() {
                         id="leaveRequests"
                         checked={notificationForm.leaveRequests}
                         onCheckedChange={(checked) =>
-                          setNotificationForm({ ...notificationForm, leaveRequests: checked })
+                          setNotificationForm({
+                            ...notificationForm,
+                            leaveRequests: checked,
+                          })
                         }
                       />
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="attendanceAlerts">Attendance Alerts</Label>
+                      <Label htmlFor="attendanceAlerts">
+                        Attendance Alerts
+                      </Label>
                       <Switch
                         id="attendanceAlerts"
                         checked={notificationForm.attendanceAlerts}
                         onCheckedChange={(checked) =>
-                          setNotificationForm({ ...notificationForm, attendanceAlerts: checked })
+                          setNotificationForm({
+                            ...notificationForm,
+                            attendanceAlerts: checked,
+                          })
                         }
                       />
                     </div>
@@ -385,7 +492,10 @@ export function SettingsForm() {
                         id="projectUpdates"
                         checked={notificationForm.projectUpdates}
                         onCheckedChange={(checked) =>
-                          setNotificationForm({ ...notificationForm, projectUpdates: checked })
+                          setNotificationForm({
+                            ...notificationForm,
+                            projectUpdates: checked,
+                          })
                         }
                       />
                     </div>
@@ -396,7 +506,10 @@ export function SettingsForm() {
                         id="systemUpdates"
                         checked={notificationForm.systemUpdates}
                         onCheckedChange={(checked) =>
-                          setNotificationForm({ ...notificationForm, systemUpdates: checked })
+                          setNotificationForm({
+                            ...notificationForm,
+                            systemUpdates: checked,
+                          })
                         }
                       />
                     </div>
@@ -460,12 +573,14 @@ export function SettingsForm() {
               </div>
 
               <div className="flex justify-end">
-                <Button className="bg-sky-600 hover:bg-sky-700">Save Changes</Button>
+                <Button className="bg-sky-600 hover:bg-sky-700">
+                  Save Changes
+                </Button>
               </div>
             </div>
           </CardContent>
         </TabsContent>
       </Tabs>
     </Card>
-  )
+  );
 }

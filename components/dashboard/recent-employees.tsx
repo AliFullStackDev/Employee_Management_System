@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Card, Avatar, List } from "antd"
-import Link from "next/link"
+import { Card, Avatar, List } from "antd";
+import Link from "next/link";
 
 const recentEmployees = [
   {
@@ -36,11 +36,14 @@ const recentEmployees = [
     joinDate: "April 5, 2023",
     avatar: "/placeholder.svg?height=40&width=40",
   },
-]
+];
 
 export function RecentEmployees() {
   return (
-    <Card title="Recently Joined Employees" className="shadow-sm hover:shadow-md transition-shadow h-full">
+    <Card
+      title="Recently Joined Employees"
+      className="shadow-sm hover:shadow-md transition-shadow h-full"
+    >
       <List
         itemLayout="horizontal"
         dataSource={recentEmployees}
@@ -49,7 +52,10 @@ export function RecentEmployees() {
             <List.Item.Meta
               avatar={<Avatar src={employee.avatar} />}
               title={
-                <Link href={`/dashboard/employees/${employee.id}`} className="text-sky-600 hover:underline">
+                <Link
+                  href={`/dashboard/employees/${employee.id}`}
+                  className="text-sky-600 hover:underline"
+                >
                   {employee.name}
                 </Link>
               }
@@ -66,5 +72,5 @@ export function RecentEmployees() {
         )}
       />
     </Card>
-  )
+  );
 }

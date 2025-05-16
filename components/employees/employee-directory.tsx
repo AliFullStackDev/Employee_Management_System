@@ -1,10 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Pagination,
   PaginationContent,
@@ -13,16 +26,29 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "@/components/ui/pagination"
-import { Plus, Search, Filter, Eye, Pencil, Trash2, Download } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { useLayout } from "@/components/layout/layout-provider"
-import { mockEmployees } from "@/lib/mock-data"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { AddEmployeeForm } from "@/components/employees/add-employee-form"
-import { EditEmployeeForm } from "@/components/employees/edit-employee-form"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/pagination";
+import {
+  Plus,
+  Search,
+  Filter,
+  Eye,
+  Pencil,
+  Trash2,
+  Download,
+} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { useLayout } from "@/components/layout/layout-provider";
+import { mockEmployees } from "@/lib/mock-data";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AddEmployeeForm } from "@/components/employees/add-employee-form";
+import { EditEmployeeForm } from "@/components/employees/edit-employee-form";
+import { useToast } from "@/hooks/use-toast";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,147 +58,164 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { ViewEmployeeDetails } from "@/components/employees/view-employee-details"
+} from "@/components/ui/alert-dialog";
+import { ViewEmployeeDetails } from "@/components/employees/view-employee-details";
 
 export function EmployeeDirectory() {
-  const { employees, addEmployee, updateEmployee, deleteEmployee } = useLayout()
-  const { toast } = useToast()
-  const [searchText, setSearchText] = useState("")
+  const { employees, addEmployee, updateEmployee, deleteEmployee } =
+    useLayout();
+  const { toast } = useToast();
+  const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState({
     department: "all",
     status: "all",
-  })
-  const [currentPage, setCurrentPage] = useState(1)
-  const pageSize = 10
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
 
   // Dialog states
-  const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const [viewDialogOpen, setViewDialogOpen] = useState(false)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Selected employee for operations
-  const [selectedEmployee, setSelectedEmployee] = useState<any>(null)
+  const [selectedEmployee, setSelectedEmployee] = useState<any>(null);
 
   const getDepartmentColor = (department: string) => {
     switch (department) {
       case "Engineering":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "Marketing":
-        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400";
       case "Human Resources":
-        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400";
       case "Finance":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "Sales":
-        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       case "Operations":
-        return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400"
+        return "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
-  }
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Active":
-        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "On Leave":
-        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+        return "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400";
       case "Remote":
-        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400"
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400";
     }
-  }
+  };
 
   // Use employees from context if available, otherwise use mock data
-  const employeeData = employees.length > 0 ? employees : mockEmployees
+  const employeeData = employees.length > 0 ? employees : mockEmployees;
 
   const filteredData = employeeData.filter((employee) => {
     const matchesSearch =
       employee.name.toLowerCase().includes(searchText.toLowerCase()) ||
       employee.position.toLowerCase().includes(searchText.toLowerCase()) ||
-      employee.employeeId.toLowerCase().includes(searchText.toLowerCase())
+      employee.employeeId.toLowerCase().includes(searchText.toLowerCase());
 
-    const matchesDepartment = filters.department === "all" || employee.department === filters.department
-    const matchesStatus = filters.status === "all" || employee.status === filters.status
+    const matchesDepartment =
+      filters.department === "all" ||
+      employee.department === filters.department;
+    const matchesStatus =
+      filters.status === "all" || employee.status === filters.status;
 
-    return matchesSearch && matchesDepartment && matchesStatus
-  })
+    return matchesSearch && matchesDepartment && matchesStatus;
+  });
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredData.length / pageSize)
-  const paginatedData = filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+  const totalPages = Math.ceil(filteredData.length / pageSize);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
 
   // Get a reliable avatar URL based on employee ID
   const getReliableAvatarUrl = (employee: any) => {
     // Extract a number from the employee ID to use as an index
-    const idNumber = Number.parseInt(employee.employeeId.replace(/\D/g, "")) || 1
-    const gender = idNumber % 2 === 0 ? "women" : "men"
-    const imageNumber = (idNumber % 30) + 1 // Limit to 30 images per gender
+    const idNumber =
+      Number.parseInt(employee.employeeId.replace(/\D/g, "")) || 1;
+    const gender = idNumber % 2 === 0 ? "women" : "men";
+    const imageNumber = (idNumber % 30) + 1; // Limit to 30 images per gender
 
-    return `https://randomuser.me/api/portraits/${gender}/${imageNumber}.jpg`
-  }
+    return `https://randomuser.me/api/portraits/${gender}/${imageNumber}.jpg`;
+  };
 
   const handleAddEmployee = (employee: any) => {
     const newEmployee = {
       ...employee,
       id: (employeeData.length + 1).toString(),
       employeeId: `EMP${(employeeData.length + 1).toString().padStart(3, "0")}`,
-    }
+    };
 
-    addEmployee(newEmployee)
-    setAddDialogOpen(false)
+    addEmployee(newEmployee);
+    setAddDialogOpen(false);
 
     toast({
       title: "Employee Added",
       description: `${employee.name} has been added to the directory.`,
-    })
-  }
+    });
+  };
 
   const handleEditEmployee = (employee: any) => {
-    updateEmployee(employee)
-    setEditDialogOpen(false)
+    updateEmployee(employee);
+    setEditDialogOpen(false);
 
     toast({
       title: "Employee Updated",
       description: `${employee.name}'s information has been updated.`,
-    })
-  }
+    });
+  };
 
   const handleDeleteEmployee = () => {
     if (selectedEmployee) {
-      deleteEmployee(selectedEmployee.id)
-      setDeleteDialogOpen(false)
+      deleteEmployee(selectedEmployee.id);
+      setDeleteDialogOpen(false);
 
       toast({
         title: "Employee Deleted",
         description: `${selectedEmployee.name} has been removed from the directory.`,
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const openViewDialog = (employee: any) => {
-    setSelectedEmployee(employee)
-    setViewDialogOpen(true)
-  }
+    setSelectedEmployee(employee);
+    setViewDialogOpen(true);
+  };
 
   const openEditDialog = (employee: any) => {
-    setSelectedEmployee(employee)
-    setEditDialogOpen(true)
-  }
+    setSelectedEmployee(employee);
+    setEditDialogOpen(true);
+  };
 
   const openDeleteDialog = (employee: any) => {
-    setSelectedEmployee(employee)
-    setDeleteDialogOpen(true)
-  }
+    setSelectedEmployee(employee);
+    setDeleteDialogOpen(true);
+  };
 
   const exportToCSV = () => {
     // Create CSV content
-    const headers = ["ID", "Name", "Position", "Department", "Email", "Phone", "Join Date", "Status"]
+    const headers = [
+      "ID",
+      "Name",
+      "Position",
+      "Department",
+      "Email",
+      "Phone",
+      "Join Date",
+      "Status",
+    ];
     const csvContent = [
       headers.join(","),
       ...filteredData.map((employee) => {
@@ -185,26 +228,26 @@ export function EmployeeDirectory() {
           employee.phone || "",
           employee.joinDate,
           employee.status,
-        ].join(",")
+        ].join(",");
       }),
-    ].join("\n")
+    ].join("\n");
 
     // Create a blob and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.setAttribute("href", url)
-    link.setAttribute("download", "employees.csv")
-    link.style.visibility = "hidden"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "employees.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast({
       title: "Export Successful",
       description: `${filteredData.length} employee records exported to CSV.`,
-    })
-  }
+    });
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
@@ -221,7 +264,12 @@ export function EmployeeDirectory() {
           </div>
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-gray-400" />
-            <Select value={filters.department} onValueChange={(value) => setFilters({ ...filters, department: value })}>
+            <Select
+              value={filters.department}
+              onValueChange={(value) =>
+                setFilters({ ...filters, department: value })
+              }
+            >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="All Departments" />
               </SelectTrigger>
@@ -235,7 +283,12 @@ export function EmployeeDirectory() {
                 <SelectItem value="Operations">Operations</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
+            <Select
+              value={filters.status}
+              onValueChange={(value) =>
+                setFilters({ ...filters, status: value })
+              }
+            >
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
@@ -250,11 +303,18 @@ export function EmployeeDirectory() {
         </div>
 
         <div className="flex gap-2">
-          <Button variant="outline" className="flex items-center gap-2" onClick={exportToCSV}>
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={exportToCSV}
+          >
             <Download className="h-4 w-4" />
             <span className="hidden sm:inline">Export</span>
           </Button>
-          <Button className="bg-sky-600 hover:bg-sky-700" onClick={() => setAddDialogOpen(true)}>
+          <Button
+            className="bg-sky-600 hover:bg-sky-700"
+            onClick={() => setAddDialogOpen(true)}
+          >
             <Plus className="h-4 w-4 mr-2" /> Add Employee
           </Button>
         </div>
@@ -280,21 +340,34 @@ export function EmployeeDirectory() {
                   <TableCell>
                     <div className="flex items-center">
                       <Avatar className="h-8 w-8 mr-2 border">
-                        <AvatarImage src={getReliableAvatarUrl(employee) || "/placeholder.svg"} alt={employee.name} />
-                        <AvatarFallback>{employee.name.charAt(0)}</AvatarFallback>
+                        <AvatarImage
+                          src={
+                            getReliableAvatarUrl(employee) || "/placeholder.svg"
+                          }
+                          alt={employee.name}
+                        />
+                        <AvatarFallback>
+                          {employee.name.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                       <span className="font-medium">{employee.name}</span>
                     </div>
                   </TableCell>
                   <TableCell>{employee.employeeId}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={getDepartmentColor(employee.department)}>
+                    <Badge
+                      variant="outline"
+                      className={getDepartmentColor(employee.department)}
+                    >
                       {employee.department}
                     </Badge>
                   </TableCell>
                   <TableCell>{employee.position}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={getStatusColor(employee.status)}>
+                    <Badge
+                      variant="outline"
+                      className={getStatusColor(employee.status)}
+                    >
                       {employee.status}
                     </Badge>
                   </TableCell>
@@ -338,7 +411,9 @@ export function EmployeeDirectory() {
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
                     <Search className="h-10 w-10 mb-2" />
                     <p>No employees found</p>
-                    <p className="text-sm">Try adjusting your search or filters</p>
+                    <p className="text-sm">
+                      Try adjusting your search or filters
+                    </p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -354,35 +429,45 @@ export function EmployeeDirectory() {
               <PaginationItem>
                 <PaginationPrevious
                   onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                  className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
 
               {Array.from({ length: Math.min(5, totalPages) }).map((_, i) => {
-                let pageNum = i + 1
+                let pageNum = i + 1;
 
                 // If we have more than 5 pages and we're not at the beginning
                 if (totalPages > 5 && currentPage > 3) {
                   if (i === 0) {
-                    pageNum = 1
+                    pageNum = 1;
                   } else if (i === 1) {
                     return (
                       <PaginationItem key="ellipsis-start">
                         <PaginationEllipsis />
                       </PaginationItem>
-                    )
+                    );
                   } else {
-                    pageNum = Math.min(totalPages - (4 - i), currentPage + (i - 2))
+                    pageNum = Math.min(
+                      totalPages - (4 - i),
+                      currentPage + (i - 2),
+                    );
                   }
                 }
 
                 return (
                   <PaginationItem key={pageNum}>
-                    <PaginationLink onClick={() => setCurrentPage(pageNum)} isActive={currentPage === pageNum}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(pageNum)}
+                      isActive={currentPage === pageNum}
+                    >
                       {pageNum}
                     </PaginationLink>
                   </PaginationItem>
-                )
+                );
               })}
 
               {totalPages > 5 && currentPage < totalPages - 2 && (
@@ -393,14 +478,22 @@ export function EmployeeDirectory() {
 
               {totalPages > 5 && currentPage < totalPages - 1 && (
                 <PaginationItem>
-                  <PaginationLink onClick={() => setCurrentPage(totalPages)}>{totalPages}</PaginationLink>
+                  <PaginationLink onClick={() => setCurrentPage(totalPages)}>
+                    {totalPages}
+                  </PaginationLink>
                 </PaginationItem>
               )}
 
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                  className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  onClick={() =>
+                    setCurrentPage(Math.min(totalPages, currentPage + 1))
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
                 />
               </PaginationItem>
             </PaginationContent>
@@ -414,7 +507,10 @@ export function EmployeeDirectory() {
           <DialogHeader>
             <DialogTitle>Add New Employee</DialogTitle>
           </DialogHeader>
-          <AddEmployeeForm onSubmit={handleAddEmployee} onCancel={() => setAddDialogOpen(false)} />
+          <AddEmployeeForm
+            onSubmit={handleAddEmployee}
+            onCancel={() => setAddDialogOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
@@ -424,7 +520,9 @@ export function EmployeeDirectory() {
           <DialogHeader>
             <DialogTitle>Employee Details</DialogTitle>
           </DialogHeader>
-          {selectedEmployee && <ViewEmployeeDetails employee={selectedEmployee} />}
+          {selectedEmployee && (
+            <ViewEmployeeDetails employee={selectedEmployee} />
+          )}
         </DialogContent>
       </Dialog>
 
@@ -450,18 +548,22 @@ export function EmployeeDirectory() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete {selectedEmployee?.name}'s record and remove
-              their data from the system.
+              This action cannot be undone. This will permanently delete{" "}
+              {selectedEmployee?.name}'s record and remove their data from the
+              system.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteEmployee} className="bg-red-600 hover:bg-red-700 text-white">
+            <AlertDialogAction
+              onClick={handleDeleteEmployee}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import { mockEmployees } from "./mock-data"
+import { mockEmployees } from "./mock-data";
 
 export function getEmployeeById(id: string) {
-  return mockEmployees.find((employee) => employee.id === id)
+  return mockEmployees.find((employee) => employee.id === id);
 }

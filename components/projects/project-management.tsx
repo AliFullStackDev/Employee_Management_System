@@ -1,22 +1,49 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Plus, Clock, CheckCircle, AlertCircle, Briefcase, Edit, Trash2, Download, Eye } from "lucide-react"
-import { mockProjects } from "@/lib/mock-data"
-import { useLayout } from "@/components/layout/layout-provider"
-import { useToast } from "@/hooks/use-toast"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { AddProjectForm } from "@/components/projects/add-project-form"
-import { EditProjectForm } from "@/components/projects/edit-project-form"
-import { ViewProjectDetails } from "@/components/projects/view-project-details"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Progress } from "@/components/ui/progress"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { useState } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Plus,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Briefcase,
+  Edit,
+  Trash2,
+  Download,
+  Eye,
+} from "lucide-react";
+import { mockProjects } from "@/lib/mock-data";
+import { useLayout } from "@/components/layout/layout-provider";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { AddProjectForm } from "@/components/projects/add-project-form";
+import { EditProjectForm } from "@/components/projects/edit-project-form";
+import { ViewProjectDetails } from "@/components/projects/view-project-details";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,21 +53,21 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 export function ProjectManagement() {
-  const { projects, addProject, updateProject, deleteProject } = useLayout()
-  const { toast } = useToast()
+  const { projects, addProject, updateProject, deleteProject } = useLayout();
+  const { toast } = useToast();
 
   // Dialog states
-  const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [editDialogOpen, setEditDialogOpen] = useState(false)
-  const [viewDialogOpen, setViewDialogOpen] = useState(false)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
 
   // Use projects from context if available, otherwise use mock data
-  const projectData = projects.length > 0 ? projects : mockProjects
+  const projectData = projects.length > 0 ? projects : mockProjects;
 
   const handleAddProject = (project: any) => {
     const newProject = {
@@ -48,58 +75,66 @@ export function ProjectManagement() {
       id: (projectData.length + 1).toString(),
       progress: 0,
       status: "In Progress",
-    }
+    };
 
-    addProject(newProject)
-    setAddDialogOpen(false)
+    addProject(newProject);
+    setAddDialogOpen(false);
 
     toast({
       title: "Project Added",
       description: `${project.name} has been added successfully.`,
-    })
-  }
+    });
+  };
 
   const handleEditProject = (project: any) => {
-    updateProject(project)
-    setEditDialogOpen(false)
+    updateProject(project);
+    setEditDialogOpen(false);
 
     toast({
       title: "Project Updated",
       description: `${project.name} has been updated successfully.`,
-    })
-  }
+    });
+  };
 
   const handleDeleteProject = () => {
     if (selectedProject) {
-      deleteProject(selectedProject.id)
-      setDeleteDialogOpen(false)
+      deleteProject(selectedProject.id);
+      setDeleteDialogOpen(false);
 
       toast({
         title: "Project Deleted",
         description: `${selectedProject.name} has been deleted.`,
         variant: "destructive",
-      })
+      });
     }
-  }
+  };
 
   const openViewDialog = (project: any) => {
-    setSelectedProject(project)
-    setViewDialogOpen(true)
-  }
+    setSelectedProject(project);
+    setViewDialogOpen(true);
+  };
 
   const openEditDialog = (project: any) => {
-    setSelectedProject(project)
-    setEditDialogOpen(true)
-  }
+    setSelectedProject(project);
+    setEditDialogOpen(true);
+  };
 
   const openDeleteDialog = (project: any) => {
-    setSelectedProject(project)
-    setDeleteDialogOpen(true)
-  }
+    setSelectedProject(project);
+    setDeleteDialogOpen(true);
+  };
 
   const exportToCSV = () => {
     // Create CSV content
-    const headers = ["Project Name", "Client", "Start Date", "Deadline", "Team", "Progress", "Status"]
+    const headers = [
+      "Project Name",
+      "Client",
+      "Start Date",
+      "Deadline",
+      "Team",
+      "Progress",
+      "Status",
+    ];
     const csvContent = [
       headers.join(","),
       ...projectData.map((project) => {
@@ -111,26 +146,26 @@ export function ProjectManagement() {
           `"${project.team.join(", ").replace(/"/g, '""')}"`,
           project.progress,
           project.status,
-        ].join(",")
+        ].join(",");
       }),
-    ].join("\n")
+    ].join("\n");
 
     // Create a blob and download
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement("a")
-    link.setAttribute("href", url)
-    link.setAttribute("download", "projects.csv")
-    link.style.visibility = "hidden"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "projects.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
     toast({
       title: "Export Successful",
       description: `${projectData.length} projects exported to CSV.`,
-    })
-  }
+    });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -139,29 +174,29 @@ export function ProjectManagement() {
           <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 flex items-center gap-1">
             <CheckCircle className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       case "In Progress":
         return (
           <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 flex items-center gap-1">
             <Clock className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       case "On Hold":
         return (
           <Badge className="bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 flex items-center gap-1">
             <AlertCircle className="h-3 w-3" /> {status}
           </Badge>
-        )
+        );
       default:
-        return <Badge>{status}</Badge>
+        return <Badge>{status}</Badge>;
     }
-  }
+  };
 
   const getProgressColor = (progress: number) => {
-    if (progress < 30) return "bg-red-500"
-    if (progress < 70) return "bg-amber-500"
-    return "bg-green-500"
-  }
+    if (progress < 30) return "bg-red-500";
+    if (progress < 70) return "bg-amber-500";
+    return "bg-green-500";
+  };
 
   return (
     <div className="space-y-6">
@@ -175,7 +210,11 @@ export function ProjectManagement() {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="outline" className="flex items-center gap-2" onClick={exportToCSV}>
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2"
+                    onClick={exportToCSV}
+                  >
                     <Download className="h-4 w-4" />
                     <span className="hidden sm:inline">Export</span>
                   </Button>
@@ -186,7 +225,10 @@ export function ProjectManagement() {
               </Tooltip>
             </TooltipProvider>
 
-            <Button className="bg-sky-600 hover:bg-sky-700" onClick={() => setAddDialogOpen(true)}>
+            <Button
+              className="bg-sky-600 hover:bg-sky-700"
+              onClick={() => setAddDialogOpen(true)}
+            >
               <Plus className="h-4 w-4 mr-2" /> Add Project
             </Button>
           </div>
@@ -220,16 +262,26 @@ export function ProjectManagement() {
                 <TableBody>
                   {projectData.map((project) => (
                     <TableRow key={project.id}>
-                      <TableCell className="font-medium text-sky-600">{project.name}</TableCell>
+                      <TableCell className="font-medium text-sky-600">
+                        {project.name}
+                      </TableCell>
                       <TableCell>{project.client}</TableCell>
                       <TableCell>{project.startDate}</TableCell>
                       <TableCell>{project.deadline}</TableCell>
                       <TableCell>
                         <div className="flex -space-x-2">
                           {project.team.slice(0, 3).map((member, index) => (
-                            <Avatar key={index} className="h-8 w-8 border-2 border-background">
-                              <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={member} />
-                              <AvatarFallback>{member.charAt(0)}</AvatarFallback>
+                            <Avatar
+                              key={index}
+                              className="h-8 w-8 border-2 border-background"
+                            >
+                              <AvatarImage
+                                src={`/placeholder.svg?height=32&width=32`}
+                                alt={member}
+                              />
+                              <AvatarFallback>
+                                {member.charAt(0)}
+                              </AvatarFallback>
                             </Avatar>
                           ))}
                           {project.team.length > 3 && (
@@ -244,7 +296,9 @@ export function ProjectManagement() {
                           <Progress
                             value={project.progress}
                             className="h-2 w-[100px]"
-                            indicatorClassName={getProgressColor(project.progress)}
+                            indicatorClassName={getProgressColor(
+                              project.progress,
+                            )}
                           />
                           <span className="text-xs">{project.progress}%</span>
                         </div>
@@ -337,16 +391,26 @@ export function ProjectManagement() {
                     .filter((project) => project.status === "In Progress")
                     .map((project) => (
                       <TableRow key={project.id}>
-                        <TableCell className="font-medium text-sky-600">{project.name}</TableCell>
+                        <TableCell className="font-medium text-sky-600">
+                          {project.name}
+                        </TableCell>
                         <TableCell>{project.client}</TableCell>
                         <TableCell>{project.startDate}</TableCell>
                         <TableCell>{project.deadline}</TableCell>
                         <TableCell>
                           <div className="flex -space-x-2">
                             {project.team.slice(0, 3).map((member, index) => (
-                              <Avatar key={index} className="h-8 w-8 border-2 border-background">
-                                <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={member} />
-                                <AvatarFallback>{member.charAt(0)}</AvatarFallback>
+                              <Avatar
+                                key={index}
+                                className="h-8 w-8 border-2 border-background"
+                              >
+                                <AvatarImage
+                                  src={`/placeholder.svg?height=32&width=32`}
+                                  alt={member}
+                                />
+                                <AvatarFallback>
+                                  {member.charAt(0)}
+                                </AvatarFallback>
                               </Avatar>
                             ))}
                             {project.team.length > 3 && (
@@ -361,7 +425,9 @@ export function ProjectManagement() {
                             <Progress
                               value={project.progress}
                               className="h-2 w-[100px]"
-                              indicatorClassName={getProgressColor(project.progress)}
+                              indicatorClassName={getProgressColor(
+                                project.progress,
+                              )}
                             />
                             <span className="text-xs">{project.progress}%</span>
                           </div>
@@ -425,16 +491,26 @@ export function ProjectManagement() {
                     .filter((project) => project.status === "Completed")
                     .map((project) => (
                       <TableRow key={project.id}>
-                        <TableCell className="font-medium text-sky-600">{project.name}</TableCell>
+                        <TableCell className="font-medium text-sky-600">
+                          {project.name}
+                        </TableCell>
                         <TableCell>{project.client}</TableCell>
                         <TableCell>{project.startDate}</TableCell>
                         <TableCell>{project.deadline}</TableCell>
                         <TableCell>
                           <div className="flex -space-x-2">
                             {project.team.slice(0, 3).map((member, index) => (
-                              <Avatar key={index} className="h-8 w-8 border-2 border-background">
-                                <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={member} />
-                                <AvatarFallback>{member.charAt(0)}</AvatarFallback>
+                              <Avatar
+                                key={index}
+                                className="h-8 w-8 border-2 border-background"
+                              >
+                                <AvatarImage
+                                  src={`/placeholder.svg?height=32&width=32`}
+                                  alt={member}
+                                />
+                                <AvatarFallback>
+                                  {member.charAt(0)}
+                                </AvatarFallback>
                               </Avatar>
                             ))}
                             {project.team.length > 3 && (
@@ -449,7 +525,9 @@ export function ProjectManagement() {
                             <Progress
                               value={project.progress}
                               className="h-2 w-[100px]"
-                              indicatorClassName={getProgressColor(project.progress)}
+                              indicatorClassName={getProgressColor(
+                                project.progress,
+                              )}
                             />
                             <span className="text-xs">{project.progress}%</span>
                           </div>
@@ -513,16 +591,26 @@ export function ProjectManagement() {
                     .filter((project) => project.status === "On Hold")
                     .map((project) => (
                       <TableRow key={project.id}>
-                        <TableCell className="font-medium text-sky-600">{project.name}</TableCell>
+                        <TableCell className="font-medium text-sky-600">
+                          {project.name}
+                        </TableCell>
                         <TableCell>{project.client}</TableCell>
                         <TableCell>{project.startDate}</TableCell>
                         <TableCell>{project.deadline}</TableCell>
                         <TableCell>
                           <div className="flex -space-x-2">
                             {project.team.slice(0, 3).map((member, index) => (
-                              <Avatar key={index} className="h-8 w-8 border-2 border-background">
-                                <AvatarImage src={`/placeholder.svg?height=32&width=32`} alt={member} />
-                                <AvatarFallback>{member.charAt(0)}</AvatarFallback>
+                              <Avatar
+                                key={index}
+                                className="h-8 w-8 border-2 border-background"
+                              >
+                                <AvatarImage
+                                  src={`/placeholder.svg?height=32&width=32`}
+                                  alt={member}
+                                />
+                                <AvatarFallback>
+                                  {member.charAt(0)}
+                                </AvatarFallback>
                               </Avatar>
                             ))}
                             {project.team.length > 3 && (
@@ -537,7 +625,9 @@ export function ProjectManagement() {
                             <Progress
                               value={project.progress}
                               className="h-2 w-[100px]"
-                              indicatorClassName={getProgressColor(project.progress)}
+                              indicatorClassName={getProgressColor(
+                                project.progress,
+                              )}
                             />
                             <span className="text-xs">{project.progress}%</span>
                           </div>
@@ -589,7 +679,10 @@ export function ProjectManagement() {
           <DialogHeader>
             <DialogTitle>Add New Project</DialogTitle>
           </DialogHeader>
-          <AddProjectForm onSubmit={handleAddProject} onCancel={() => setAddDialogOpen(false)} />
+          <AddProjectForm
+            onSubmit={handleAddProject}
+            onCancel={() => setAddDialogOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
@@ -625,18 +718,21 @@ export function ProjectManagement() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the project and remove all associated
-              data.emove all associated data.
+              This action cannot be undone. This will permanently delete the
+              project and remove all associated data.emove all associated data.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteProject} className="bg-red-600 hover:bg-red-700 text-white">
+            <AlertDialogAction
+              onClick={handleDeleteProject}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

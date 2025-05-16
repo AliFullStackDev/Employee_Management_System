@@ -1,22 +1,32 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface AddEmployeeFormProps {
-  onSubmit: (data: any) => void
-  onCancel: () => void
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
 export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
@@ -30,42 +40,50 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
     status: "Active",
     birthDate: "",
     address: "",
-  })
+  });
 
-  const [joinDateOpen, setJoinDateOpen] = useState(false)
-  const [birthDateOpen, setBirthDateOpen] = useState(false)
-  const [joinDate, setJoinDate] = useState<Date | undefined>(new Date())
-  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined)
+  const [joinDateOpen, setJoinDateOpen] = useState(false);
+  const [birthDateOpen, setBirthDateOpen] = useState(false);
+  const [joinDate, setJoinDate] = useState<Date | undefined>(new Date());
+  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleJoinDateSelect = (date: Date | undefined) => {
-    setJoinDate(date)
+    setJoinDate(date);
     if (date) {
-      setFormData((prev) => ({ ...prev, joinDate: format(date, "yyyy-MM-dd") }))
-      setJoinDateOpen(false)
+      setFormData((prev) => ({
+        ...prev,
+        joinDate: format(date, "yyyy-MM-dd"),
+      }));
+      setJoinDateOpen(false);
     }
-  }
+  };
 
   const handleBirthDateSelect = (date: Date | undefined) => {
-    setBirthDate(date)
+    setBirthDate(date);
     if (date) {
-      setFormData((prev) => ({ ...prev, birthDate: format(date, "yyyy-MM-dd") }))
-      setBirthDateOpen(false)
+      setFormData((prev) => ({
+        ...prev,
+        birthDate: format(date, "yyyy-MM-dd"),
+      }));
+      setBirthDateOpen(false);
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -102,7 +120,10 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
           <Label htmlFor="department">
             Department <span className="text-red-500">*</span>
           </Label>
-          <Select value={formData.department} onValueChange={(value) => handleSelectChange("department", value)}>
+          <Select
+            value={formData.department}
+            onValueChange={(value) => handleSelectChange("department", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select department" />
             </SelectTrigger>
@@ -151,14 +172,22 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !joinDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !joinDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {joinDate ? format(joinDate, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={joinDate} onSelect={handleJoinDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={joinDate}
+                onSelect={handleJoinDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
@@ -167,7 +196,10 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
           <Label htmlFor="status">
             Status <span className="text-red-500">*</span>
           </Label>
-          <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)}>
+          <Select
+            value={formData.status}
+            onValueChange={(value) => handleSelectChange("status", value)}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -185,7 +217,10 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !birthDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !birthDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {birthDate ? format(birthDate, "PPP") : "Select date"}
@@ -226,5 +261,5 @@ export function AddEmployeeForm({ onSubmit, onCancel }: AddEmployeeFormProps) {
         </Button>
       </div>
     </form>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { Card } from "antd"
-import dynamic from "next/dynamic"
-import { LineChart, type LineChartProps } from "@/components/ui/chart"
+import { Card } from "antd";
+import dynamic from "next/dynamic";
+import { LineChart, type LineChartProps } from "@/components/ui/chart";
 
 // Dynamically import the chart to avoid SSR issues
-const Chart = dynamic(() => Promise.resolve(LineChart), { ssr: false })
+const Chart = dynamic(() => Promise.resolve(LineChart), { ssr: false });
 
 export function EmployeeActivity() {
   const chartData: LineChartProps = {
@@ -44,11 +44,14 @@ export function EmployeeActivity() {
         },
       },
     },
-  }
+  };
 
   return (
-    <Card title="Weekly Activity" className="shadow-sm hover:shadow-md transition-shadow h-full">
+    <Card
+      title="Weekly Activity"
+      className="shadow-sm hover:shadow-md transition-shadow h-full"
+    >
       <Chart {...chartData} />
     </Card>
-  )
+  );
 }

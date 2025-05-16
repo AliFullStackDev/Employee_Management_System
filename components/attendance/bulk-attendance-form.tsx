@@ -1,91 +1,106 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Clock, CheckSquare } from "lucide-react"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { useLayout } from "@/components/layout/layout-provider"
-import { mockEmployees } from "@/lib/mock-data"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Card, CardContent } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, Clock, CheckSquare } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { useLayout } from "@/components/layout/layout-provider";
+import { mockEmployees } from "@/lib/mock-data";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Card, CardContent } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface BulkAttendanceFormProps {
-  onSubmit: (data: any) => void
-  onCancel: () => void
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
-export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormProps) {
-  const { employees } = useLayout()
-  const [calendarOpen, setCalendarOpen] = useState(false)
-  const [date, setDate] = useState<Date>(new Date())
-  const [selectAll, setSelectAll] = useState(false)
+export function BulkAttendanceForm({
+  onSubmit,
+  onCancel,
+}: BulkAttendanceFormProps) {
+  const { employees } = useLayout();
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [date, setDate] = useState<Date>(new Date());
+  const [selectAll, setSelectAll] = useState(false);
 
   // Use employees from context if available, otherwise use mock data
-  const employeeData = employees.length > 0 ? employees : mockEmployees
+  const employeeData = employees.length > 0 ? employees : mockEmployees;
 
   const [formData, setFormData] = useState({
     selectedEmployees: [] as string[],
     checkIn: "09:00",
     checkOut: "17:00",
     status: "Present",
-  })
+  });
 
   const handleDateSelect = (selectedDate: Date | undefined) => {
     if (selectedDate) {
-      setDate(selectedDate)
-      setCalendarOpen(false)
+      setDate(selectedDate);
+      setCalendarOpen(false);
     }
-  }
+  };
 
   const handleTimeChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSelectAllEmployees = (checked: boolean) => {
-    setSelectAll(checked)
+    setSelectAll(checked);
     if (checked) {
       setFormData((prev) => ({
         ...prev,
         selectedEmployees: employeeData.map((emp) => emp.id),
-      }))
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
         selectedEmployees: [],
-      }))
+      }));
     }
-  }
+  };
 
   const handleSelectEmployee = (employeeId: string, checked: boolean) => {
     if (checked) {
       setFormData((prev) => ({
         ...prev,
         selectedEmployees: [...prev.selectedEmployees, employeeId],
-      }))
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
-        selectedEmployees: prev.selectedEmployees.filter((id) => id !== employeeId),
-      }))
+        selectedEmployees: prev.selectedEmployees.filter(
+          (id) => id !== employeeId,
+        ),
+      }));
     }
-  }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     onSubmit({
       ...formData,
       date,
-    })
-  }
+    });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -98,14 +113,22 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !date && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {date ? format(date, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={handleDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
@@ -148,7 +171,12 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
 
         <div className="space-y-2">
           <Label htmlFor="status">Status</Label>
-          <Select value={formData.status} onValueChange={(value) => setFormData({ ...formData, status: value })}>
+          <Select
+            value={formData.status}
+            onValueChange={(value) =>
+              setFormData({ ...formData, status: value })
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select status" />
             </SelectTrigger>
@@ -166,7 +194,11 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
               Select Employees <span className="text-red-500">*</span>
             </Label>
             <div className="flex items-center space-x-2">
-              <Checkbox id="selectAll" checked={selectAll} onCheckedChange={handleSelectAllEmployees} />
+              <Checkbox
+                id="selectAll"
+                checked={selectAll}
+                onCheckedChange={handleSelectAllEmployees}
+              />
               <Label htmlFor="selectAll" className="text-sm font-medium">
                 Select All
               </Label>
@@ -178,13 +210,23 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
               <ScrollArea className="h-[200px] pr-4">
                 <div className="space-y-2">
                   {employeeData.map((employee) => (
-                    <div key={employee.id} className="flex items-center space-x-2">
+                    <div
+                      key={employee.id}
+                      className="flex items-center space-x-2"
+                    >
                       <Checkbox
                         id={`employee-${employee.id}`}
-                        checked={formData.selectedEmployees.includes(employee.id)}
-                        onCheckedChange={(checked) => handleSelectEmployee(employee.id, checked === true)}
+                        checked={formData.selectedEmployees.includes(
+                          employee.id,
+                        )}
+                        onCheckedChange={(checked) =>
+                          handleSelectEmployee(employee.id, checked === true)
+                        }
                       />
-                      <Label htmlFor={`employee-${employee.id}`} className="flex-1">
+                      <Label
+                        htmlFor={`employee-${employee.id}`}
+                        className="flex-1"
+                      >
                         {employee.name} - {employee.position}
                       </Label>
                     </div>
@@ -194,7 +236,9 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
             </CardContent>
           </Card>
 
-          <div className="text-sm text-muted-foreground">{formData.selectedEmployees.length} employees selected</div>
+          <div className="text-sm text-muted-foreground">
+            {formData.selectedEmployees.length} employees selected
+          </div>
         </div>
       </div>
 
@@ -212,5 +256,5 @@ export function BulkAttendanceForm({ onSubmit, onCancel }: BulkAttendanceFormPro
         </Button>
       </div>
     </form>
-  )
+  );
 }

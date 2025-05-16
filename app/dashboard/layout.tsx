@@ -1,11 +1,11 @@
-import type React from "react"
-import { AppSidebar } from "@/components/app-sidebar"
-import { AppHeader } from "@/components/app-header"
+import type React from "react";
+import { AppSidebar } from "@/components/app-sidebar";
+import { AppHeader } from "@/components/app-header";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -15,5 +15,5 @@ export default function DashboardLayout({
         <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

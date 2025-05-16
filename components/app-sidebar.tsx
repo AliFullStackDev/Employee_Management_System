@@ -1,45 +1,57 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { BarChart3, Users, Calendar, ClipboardList, Briefcase, Settings, X } from "lucide-react"
-import { useLayout } from "@/components/layout/layout-provider"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  BarChart3,
+  Users,
+  Calendar,
+  ClipboardList,
+  Briefcase,
+  Settings,
+  X,
+} from "lucide-react";
+import { useLayout } from "@/components/layout/layout-provider";
 
 const sidebarItems = [
   { name: "Dashboard", href: "/dashboard", icon: BarChart3 },
   { name: "Employees", href: "/dashboard/employees", icon: Users },
   { name: "Attendance", href: "/dashboard/attendance", icon: Calendar },
-  { name: "Leave Management", href: "/dashboard/leave-management", icon: ClipboardList },
+  {
+    name: "Leave Management",
+    href: "/dashboard/leave-management",
+    icon: ClipboardList,
+  },
   { name: "Projects", href: "/dashboard/projects", icon: Briefcase },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
-]
+];
 
 export function AppSidebar() {
-  const pathname = usePathname()
-  const { sidebarOpen, setSidebarOpen } = useLayout()
-  const [isMobile, setIsMobile] = useState(false)
+  const pathname = usePathname();
+  const { sidebarOpen, setSidebarOpen } = useLayout();
+  const [isMobile, setIsMobile] = useState(false);
 
   // Check if we're on mobile
   useEffect(() => {
     const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      setIsMobile(window.innerWidth < 768);
       if (window.innerWidth < 768) {
-        setSidebarOpen(false)
+        setSidebarOpen(false);
       } else {
-        setSidebarOpen(true)
+        setSidebarOpen(true);
       }
-    }
+    };
 
-    checkIfMobile()
-    window.addEventListener("resize", checkIfMobile)
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
 
     return () => {
-      window.removeEventListener("resize", checkIfMobile)
-    }
-  }, [setSidebarOpen])
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, [setSidebarOpen]);
 
   return (
     <>
@@ -51,15 +63,23 @@ export function AppSidebar() {
       >
         <div className="flex flex-col h-full">
           <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-            <h1 className="text-xl font-bold text-sky-600 dark:text-sky-400">EMS Pro</h1>
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(false)}>
+            <h1 className="text-xl font-bold text-sky-600 dark:text-sky-400">
+              EMS Pro
+            </h1>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setSidebarOpen(false)}
+            >
               <X className="h-5 w-5" />
             </Button>
           </div>
           <nav className="flex-1 overflow-y-auto p-4 space-y-1">
             {sidebarItems.map((item) => {
-              const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`)
-              const Icon = item.icon
+              const isActive =
+                pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const Icon = item.icon;
 
               return (
                 <Link
@@ -76,7 +96,7 @@ export function AppSidebar() {
                   <Icon className="mr-3 h-5 w-5" />
                   {item.name}
                 </Link>
-              )
+              );
             })}
           </nav>
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
@@ -85,13 +105,17 @@ export function AppSidebar() {
                 A
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Admin User</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">admin@company.com</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Admin User
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  admin@company.com
+                </p>
               </div>
             </div>
           </div>
         </div>
       </aside>
     </>
-  )
+  );
 }

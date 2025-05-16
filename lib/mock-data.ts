@@ -49,7 +49,8 @@ export const mockEmployees = [
       {
         title: "Annual Performance Review",
         rating: 4.5,
-        comments: "Sarah has been an exceptional team member, consistently delivering high-quality work.",
+        comments:
+          "Sarah has been an exceptional team member, consistently delivering high-quality work.",
         reviewer: "David Wilson",
         date: "April 1, 2023",
       },
@@ -182,7 +183,7 @@ export const mockEmployees = [
     status: "Remote",
     avatar: "/placeholder.svg?height=40&width=40",
   },
-]
+];
 
 export const mockAttendance = [
   {
@@ -305,7 +306,7 @@ export const mockAttendance = [
     workingHours: "8.92",
     status: "Present",
   },
-]
+];
 
 export const mockLeaveRequests = [
   {
@@ -418,7 +419,7 @@ export const mockLeaveRequests = [
     reason: "Family event",
     status: "Pending",
   },
-]
+];
 
 export const mockProjects = [
   {
@@ -521,4 +522,4 @@ export const mockProjects = [
     progress: 100,
     status: "Completed",
   },
-]
+];

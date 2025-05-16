@@ -1,8 +1,8 @@
-import { DashboardStats } from "@/components/dashboard/dashboard-stats"
-import { EmployeeActivity } from "@/components/dashboard/employee-activity"
-import { RecentEmployees } from "@/components/dashboard/recent-employees"
-import { UpcomingEvents } from "@/components/dashboard/upcoming-events"
-import { DepartmentDistribution } from "@/components/dashboard/department-distribution"
+import { DashboardStats } from "@/components/dashboard/dashboard-stats";
+import { EmployeeActivity } from "@/components/dashboard/employee-activity";
+import { RecentEmployees } from "@/components/dashboard/recent-employees";
+import { UpcomingEvents } from "@/components/dashboard/upcoming-events";
+import { DepartmentDistribution } from "@/components/dashboard/department-distribution";
 
 export default function DashboardPage() {
   return (
@@ -18,5 +18,5 @@ export default function DashboardPage() {
         <UpcomingEvents />
       </div>
     </div>
-  )
+  );
 }

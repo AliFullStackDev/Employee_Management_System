@@ -1,119 +1,141 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { format, parse } from "date-fns"
-import { cn } from "@/lib/utils"
-import { useLayout } from "@/components/layout/layout-provider"
-import { mockEmployees } from "@/lib/mock-data"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Slider } from "@/components/ui/slider"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format, parse } from "date-fns";
+import { cn } from "@/lib/utils";
+import { useLayout } from "@/components/layout/layout-provider";
+import { mockEmployees } from "@/lib/mock-data";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Slider } from "@/components/ui/slider";
 
 interface EditProjectFormProps {
-  project: any
-  onSubmit: (data: any) => void
-  onCancel: () => void
+  project: any;
+  onSubmit: (data: any) => void;
+  onCancel: () => void;
 }
 
-export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectFormProps) {
-  const { employees } = useLayout()
-  const [startDateOpen, setStartDateOpen] = useState(false)
-  const [deadlineDateOpen, setDeadlineDateOpen] = useState(false)
+export function EditProjectForm({
+  project,
+  onSubmit,
+  onCancel,
+}: EditProjectFormProps) {
+  const { employees } = useLayout();
+  const [startDateOpen, setStartDateOpen] = useState(false);
+  const [deadlineDateOpen, setDeadlineDateOpen] = useState(false);
 
   // Use employees from context if available, otherwise use mock data
-  const employeeData = employees.length > 0 ? employees : mockEmployees
+  const employeeData = employees.length > 0 ? employees : mockEmployees;
 
-  const [formData, setFormData] = useState({ ...project })
+  const [formData, setFormData] = useState({ ...project });
 
   const [startDate, setStartDate] = useState<Date | undefined>(
     project.startDate ? parseDate(project.startDate) : new Date(),
-  )
+  );
 
   const [deadlineDate, setDeadlineDate] = useState<Date | undefined>(
     project.deadline ? parseDate(project.deadline) : new Date(),
-  )
+  );
 
   function parseDate(dateString: string): Date | undefined {
     try {
       // Try different date formats
       try {
-        return parse(dateString, "MMMM d, yyyy", new Date())
+        return parse(dateString, "MMMM d, yyyy", new Date());
       } catch {
         try {
-          return parse(dateString, "yyyy-MM-dd", new Date())
+          return parse(dateString, "yyyy-MM-dd", new Date());
         } catch {
-          return new Date(dateString)
+          return new Date(dateString);
         }
       }
     } catch (error) {
-      console.error("Error parsing date:", error)
-      return new Date()
+      console.error("Error parsing date:", error);
+      return new Date();
     }
   }
 
   useEffect(() => {
-    setFormData({ ...project })
-    setStartDate(parseDate(project.startDate))
-    setDeadlineDate(parseDate(project.deadline))
-  }, [project])
+    setFormData({ ...project });
+    setStartDate(parseDate(project.startDate));
+    setDeadlineDate(parseDate(project.deadline));
+  }, [project]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
-      setStartDate(date)
-      setFormData((prev) => ({ ...prev, startDate: format(date, "MMMM d, yyyy") }))
-      setStartDateOpen(false)
+      setStartDate(date);
+      setFormData((prev) => ({
+        ...prev,
+        startDate: format(date, "MMMM d, yyyy"),
+      }));
+      setStartDateOpen(false);
     }
-  }
+  };
 
   const handleDeadlineDateSelect = (date: Date | undefined) => {
     if (date) {
-      setDeadlineDate(date)
-      setFormData((prev) => ({ ...prev, deadline: format(date, "MMMM d, yyyy") }))
-      setDeadlineDateOpen(false)
+      setDeadlineDate(date);
+      setFormData((prev) => ({
+        ...prev,
+        deadline: format(date, "MMMM d, yyyy"),
+      }));
+      setDeadlineDateOpen(false);
     }
-  }
+  };
 
   const handleTeamMemberToggle = (employeeName: string, checked: boolean) => {
     if (checked) {
       setFormData((prev) => ({
         ...prev,
         team: [...prev.team, employeeName],
-      }))
+      }));
     } else {
       setFormData((prev) => ({
         ...prev,
         team: prev.team.filter((name: string) => name !== employeeName),
-      }))
+      }));
     }
-  }
+  };
 
   const handleProgressChange = (value: number[]) => {
-    setFormData((prev) => ({ ...prev, progress: value[0] }))
-  }
+    setFormData((prev) => ({ ...prev, progress: value[0] }));
+  };
 
   const handleStatusChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, status: value }))
-  }
+    setFormData((prev) => ({ ...prev, status: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(formData)
-  }
+    e.preventDefault();
+    onSubmit(formData);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -155,14 +177,22 @@ export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectForm
               <Button
                 id="startDate"
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !startDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !startDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {startDate ? format(startDate, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={startDate} onSelect={handleStartDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={startDate}
+                onSelect={handleStartDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
@@ -176,14 +206,22 @@ export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectForm
               <Button
                 id="deadline"
                 variant="outline"
-                className={cn("w-full justify-start text-left font-normal", !deadlineDate && "text-muted-foreground")}
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !deadlineDate && "text-muted-foreground",
+                )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {deadlineDate ? format(deadlineDate, "PPP") : "Select date"}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="single" selected={deadlineDate} onSelect={handleDeadlineDateSelect} initialFocus />
+              <Calendar
+                mode="single"
+                selected={deadlineDate}
+                onSelect={handleDeadlineDateSelect}
+                initialFocus
+              />
             </PopoverContent>
           </Popover>
         </div>
@@ -230,7 +268,9 @@ export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectForm
                   <Checkbox
                     id={`team-${employee.id}`}
                     checked={formData.team.includes(employee.name)}
-                    onCheckedChange={(checked) => handleTeamMemberToggle(employee.name, checked === true)}
+                    onCheckedChange={(checked) =>
+                      handleTeamMemberToggle(employee.name, checked === true)
+                    }
                   />
                   <Label htmlFor={`team-${employee.id}`} className="flex-1">
                     {employee.name} - {employee.position}
@@ -240,7 +280,9 @@ export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectForm
             </div>
           </ScrollArea>
         </div>
-        <p className="text-sm text-muted-foreground">{formData.team.length} team members selected</p>
+        <p className="text-sm text-muted-foreground">
+          {formData.team.length} team members selected
+        </p>
       </div>
 
       <div className="space-y-2">
@@ -264,5 +306,5 @@ export function EditProjectForm({ project, onSubmit, onCancel }: EditProjectForm
         </Button>
       </div>
     </form>
-  )
+  );
 }

@@ -60,7 +60,9 @@
 
 /* Custom styles for the application */
 .sidebar-transition {
-  transition: transform 0.3s ease, margin-left 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    margin-left 0.3s ease;
 }
 
 /* Responsive adjustments */
@@ -85,14 +87,20 @@
 
 /* Improved card styling */
 .card-hover-effect {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .card-hover-effect:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .dark .card-hover-effect:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.3),
+    0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }

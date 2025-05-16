@@ -1,4 +1,4 @@
-import { ProjectManagement } from "@/components/projects/project-management"
+import { ProjectManagement } from "@/components/projects/project-management";
 
 export default function ProjectsPage() {
   return (
@@ -6,5 +6,5 @@ export default function ProjectsPage() {
       <h1 className="text-2xl font-bold tracking-tight">Project Management</h1>
       <ProjectManagement />
     </div>
-  )
+  );
 }

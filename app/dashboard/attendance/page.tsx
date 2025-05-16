@@ -1,4 +1,4 @@
-import { AttendanceTracker } from "@/components/attendance/attendance-tracker"
+import { AttendanceTracker } from "@/components/attendance/attendance-tracker";
 
 export default function AttendancePage() {
   return (
@@ -6,5 +6,5 @@ export default function AttendancePage() {
       <h1 className="text-2xl font-bold tracking-tight">Attendance Tracker</h1>
       <AttendanceTracker />
     </div>
-  )
+  );
 }
